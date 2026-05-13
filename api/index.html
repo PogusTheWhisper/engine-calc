@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Engine Calc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow Condensed',sans-serif;background:#0a0c0f;color:#e0e0e0;min-height:100vh;padding:24px 16px;background-image:radial-gradient(ellipse at 20% 0%,rgba(255,107,0,.07) 0%,transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(41,182,246,.05) 0%,transparent 60%)}
+.mono{font-family:'JetBrains Mono',monospace}
+.header{text-align:center;margin-bottom:28px}
+.header .bar{width:50px;height:3px;background:#ff6b00;margin:0 auto 10px}
+.header h1{font-size:1.9rem;font-weight:700;letter-spacing:.2em;color:#fff;text-transform:uppercase}
+.header h1 span{color:#ff6b00}
+.header .sub{font-size:.78rem;color:#5a6a7a;letter-spacing:.1em;margin-top:4px}
+.grid{max-width:860px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:680px){.grid{grid-template-columns:1fr}}
+.card{background:#111418;border:1px solid #1e2530;border-radius:8px;padding:20px;position:relative;transition:all .3s}
+.step-num{position:absolute;top:14px;right:16px;font-size:.68rem;color:#3a4a5a;letter-spacing:.15em;font-family:'JetBrains Mono',monospace}
+.card h2{color:#ff6b00;font-size:1rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-bottom:12px}
+.field-label{font-size:.72rem;color:#5a6a7a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.input-wrap{display:flex;align-items:center;background:rgba(0,0,0,.4);border:1px solid #374151;border-radius:4px;transition:border-color .2s}
+.input-wrap:focus-within{border-color:#ff6b00}
+.input-wrap input{flex:1;background:transparent;border:none;outline:none;color:#fff;padding:9px 12px;font-family:'JetBrains Mono',monospace;font-size:1rem;width:100%}
+.input-wrap .unit{padding:0 12px;color:#4b5563;font-size:.72rem;border-left:1px solid #374151;white-space:nowrap}
+.preview{background:rgba(255,107,0,.07);border:1px solid rgba(255,107,0,.2);border-radius:6px;padding:8px 12px;font-size:.85rem;margin:10px 0}
+.preview .muted{color:#888}
+.preview .accent{color:#ff6b00;font-family:'JetBrains Mono',monospace}
+.preview .sep{color:#555;margin:0 8px}
+.btn{width:100%;padding:9px;border:none;border-radius:4px;color:#fff;font-size:1rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,#ff6b00,#e55a00)}
+.btn:disabled{background:#1e2530;color:#444;cursor:not-allowed}
+.err{color:#ff5252;font-size:.82rem;margin-top:6px;min-height:1em}
+.display{background:linear-gradient(135deg,rgba(255,107,0,.15),rgba(255,107,0,.05));border:1px solid rgba(255,107,0,.3);border-radius:6px;padding:10px 14px;text-align:center;margin:14px 0 10px}
+.display .big{font-family:'JetBrains Mono',monospace;font-size:2rem;color:#ff6b00;line-height:1}
+.display .lbl{font-size:.68rem;color:#5a6a7a;letter-spacing:.12em;margin-top:2px}
+.tag{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:0 4px 4px 0;background:rgba(255,255,255,.04);border-left:2px solid;font-size:.92rem;margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.tag .muted{color:#888;font-family:'Barlow Condensed',sans-serif;letter-spacing:.05em}
+.tag.orange{border-color:#ff6b00;color:#ffa66b}
+.tag.green{border-color:#10b981;color:#34d399}
+.tag.blue{border-color:#0ea5e9;color:#38bdf8}
+.tag.yellow{border-color:#fbbf24;color:#fcd34d}
+.note{font-size:.85rem;color:#7a8a9a;background:rgba(255,255,255,.02);border:1px solid #1e2530;border-left:2px solid #1e2530;border-radius:4px;padding:6px 10px}
+.fuel-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.fuel-btn{padding:8px 12px;border:1px solid #1e2530;border-radius:6px;background:transparent;color:#888;cursor:pointer;font-size:.95rem;letter-spacing:.05em;transition:all .2s;font-family:inherit}
+.fuel-btn.active{border-color:#ff6b00;background:rgba(255,107,0,.15);color:#ff6b00;font-weight:700}
+.bar-wrap{margin-bottom:12px}
+.bar-row{display:flex;justify-content:space-between;font-size:.75rem;color:#5a6a7a;margin-bottom:4px}
+.bar-row .accent{color:#ff6b00}
+.bar-track{height:6px;background:#1e2530;border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,#ff6b00,#ffaa00);border-radius:3px;transition:width .5s ease}
+.bar-scale{display:flex;justify-content:space-between;font-size:.7rem;color:#2a3a4a;margin-top:2px}
+.step3{grid-column:1/-1;opacity:.4}
+.step3.active{opacity:1;border-color:rgba(255,107,0,.3)}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+@media (max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:rgba(255,255,255,.02);border:1px solid #1e2530;border-radius:6px;padding:12px 8px;text-align:center}
+.stat .v{font-family:'JetBrains Mono',monospace;font-size:1.1rem;line-height:1}
+.stat .l{font-size:.7rem;color:#5a6a7a;margin-top:4px;letter-spacing:.05em;line-height:1.4}
+.empty{text-align:center;color:#3a4a5a;font-size:.88rem;padding:8px 0}
+footer{max-width:860px;margin:12px auto 0;text-align:center;font-size:.75rem;color:#2a3a4a;border-top:1px solid #1e2530;padding-top:12px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="bar"></div>
+  <h1>ENGINE <span>CALC</span></h1>
+  <div class="sub">ADVANCED TUNING CALCULATOR · SINGLE CYLINDER</div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <div class="step-num">STEP 01</div>
+    <h2>⬤ ข้อมูลเครื่องยนต์</h2>
+    <div class="row">
+      <div class="field">
+        <div class="field-label">ลูกสูบ (Bore)</div>
+        <div class="input-wrap"><input id="bore" type="number" placeholder="57" min="1" max="300"><span class="unit">mm</span></div>
+      </div>
+      <div class="field">
+        <div class="field-label">ช่วงชัก (Stroke)</div>
+        <div class="input-wrap"><input id="stroke" type="number" placeholder="58.7" min="1" max="300"><span class="unit">mm</span></div>
+      </div>
+    </div>
+    <div id="preview" class="preview" style="display:none"></div>
+    <button class="btn" onclick="calcStep1()">คำนวณ STEP 1</button>
+    <div id="err1" class="err"></div>
+    <div id="s1-out"></div>
+  </div>
+
+  <div class="card">
+    <div class="step-num">STEP 02</div>
+    <h2>☁ เลือกน้ำมันเชื้อเพลิง</h2>
+    <div class="field-label">ชนิดน้ำมัน</div>
+    <div class="fuel-grid" id="fuel-grid"></div>
+    <div id="cr-bar" style="display:none" class="bar-wrap">
+      <div class="bar-row"><span>CR ที่เหมาะสม</span><span class="accent" id="cr-text"></span></div>
+      <div class="bar-track"><div class="bar-fill" id="cr-fill"></div></div>
+      <div class="bar-scale"><span>9:1</span><span>16:1</span></div>
+    </div>
+    <button class="btn" id="btn2" onclick="calcStep2()" disabled>คำนวณ STEP 1 ก่อน</button>
+    <div id="err2" class="err"></div>
+    <div id="s2-out"></div>
+  </div>
+
+  <div class="card step3" id="step3">
+    <div class="step-num">STEP 03</div>
+    <h2>⚡ ประมาณกำลัง & จุดระเบิด</h2>
+    <div id="s3-out"><div class="empty">คำนวณ Step 1 และ 2 ก่อนเพื่อดูผล</div></div>
+  </div>
+</div>
+
+<footer>⚙ ค่าที่แสดงเป็นค่าประมาณสำหรับเครื่องยนต์สูบเดี่ยว · ใช้เป็นแนวทางเท่านั้น ควรปรึกษาช่างผู้เชี่ยวชาญก่อนแต่งเครื่อง</footer>
+
+<script>
+const FUELS = {
+  "91":  {label:"Gasohol 91", cr:10.0},
+  "95":  {label:"Gasohol 95", cr:10.5},
+  "E20": {label:"E20",        cr:11.5},
+  "E85": {label:"E85",        cr:13.0},
+};
+const state = { s1:null, fuel:null };
+const $ = id => document.getElementById(id);
+
+function bsChar(r){
+  if (r < 0.9) return {label:"Long Stroke", note:"💪 แรงบิดต่ำรอบ เหมาะสายบ้าน", col:"#38bdf8"};
+  if (r > 1.1) return {label:"Over Square",  note:"⚡ รอบสูงได้ดี เหมาะสายซิ่ง",  col:"#ff6b00"};
+  return {label:"Square", note:"✅ สมดุล ใช้ได้ทั่วไป", col:"#34d399"};
+}
+
+function updatePreview(){
+  const b = parseFloat($("bore").value), s = parseFloat($("stroke").value);
+  if (b>0 && s>0){
+    const cc = (Math.PI/4*b*b*s/1000).toFixed(1);
+    const r  = (b/s).toFixed(3);
+    const c  = bsChar(parseFloat(r));
+    $("preview").innerHTML =
+      '<span class="muted">Preview:</span> <span class="accent">'+cc+' cc</span>'+
+      '<span class="sep">|</span><span class="muted">B/S:</span> <span class="mono" style="color:#fff">'+r+'</span>'+
+      ' <span style="color:'+c.col+'"> · '+c.label+'</span>';
+    $("preview").style.display = "block";
+  } else $("preview").style.display = "none";
+}
+$("bore").addEventListener("input", updatePreview);
+$("stroke").addEventListener("input", updatePreview);
+
+const fg = $("fuel-grid");
+Object.entries(FUELS).forEach(function(e){
+  var k=e[0], d=e[1];
+  var b = document.createElement("button");
+  b.className = "fuel-btn"; b.textContent = d.label;
+  b.onclick = function(){ selectFuel(k); };
+  b.dataset.fuel = k;
+  fg.appendChild(b);
+});
+function selectFuel(k){
+  state.fuel = k;
+  document.querySelectorAll(".fuel-btn").forEach(function(b){ b.classList.toggle("active", b.dataset.fuel===k); });
+  const cr = FUELS[k].cr;
+  $("cr-text").textContent = cr + ":1";
+  $("cr-fill").style.width = ((cr-9)/7*100).toFixed(0) + "%";
+  $("cr-bar").style.display = "block";
+}
+
+async function callApi(params){
+  const qs = new URLSearchParams(params).toString();
+  const r = await fetch("/api/calculate?" + qs);
+  return r.json();
+}
+
+function tag(color,label,value){
+  return '<div class="tag '+color+'"><span class="muted">'+label+'</span><span>'+value+'</span></div>';
+}
+
+async function calcStep1(){
+  const b = parseFloat($("bore").value), s = parseFloat($("stroke").value);
+  if (!(b>0) || !(s>0)){ $("err1").textContent = "⚠ กรุณากรอก Bore และ Stroke ให้ถูกต้อง"; return; }
+  $("err1").textContent = "";
+  const d = await callApi({bore:b, stroke:s});
+  if (d.error){ $("err1").textContent = "⚠ " + d.error; return; }
+  state.s1 = {bore:b, stroke:s};
+  const c = bsChar(d.engine.ratio);
+  $("s1-out").innerHTML =
+    '<div class="display"><div class="big">'+d.displacement_cc.toFixed(2)+'</div><div class="lbl">CYLINDER DISPLACEMENT (cc)</div></div>'+
+    tag("orange","วาล์วไอดี", d.valves.intake_mm + " mm")+
+    tag("yellow","วาล์วไอเสีย", d.valves.exhaust_mm + " mm")+
+    tag("blue","ลิ้นเร่ง", d.valves.throttle_mm + " mm")+
+    tag("green","B/S Ratio", d.engine.ratio.toFixed(3) + " (" + c.label + ")")+
+    '<div class="note">'+c.note+'</div>';
+  $("btn2").disabled = false;
+  $("btn2").textContent = "คำนวณ STEP 2";
+  $("s2-out").innerHTML = "";
+  $("s3-out").innerHTML = '<div class="empty">คำนวณ Step 1 และ 2 ก่อนเพื่อดูผล</div>';
+  $("step3").classList.remove("active");
+}
+
+async function calcStep2(){
+  if (!state.s1){ $("err2").textContent = "⚠ คำนวณ Step 1 ก่อน"; return; }
+  if (!state.fuel){ $("err2").textContent = "⚠ กรุณาเลือกน้ำมัน"; return; }
+  $("err2").textContent = "";
+  const d = await callApi({bore:state.s1.bore, stroke:state.s1.stroke, fuel:state.fuel});
+  if (d.error){ $("err2").textContent = "⚠ " + d.error; return; }
+  $("s2-out").innerHTML =
+    tag("orange","กำลังอัด", d.fuel.compression_ratio + ":1")+
+    tag("green","ห้องเผาไหม้", d.fuel.chamber_cc + " cc")+
+    tag("yellow","หัวฉีด", d.fuel.injector_cc_min + " cc/min")+
+    tag("blue","AFR (Stoich)", d.fuel.afr_stoich + ":1");
+
+  const p = d.performance;
+  const stats = [
+    {v:p.hp_estimate+" HP", l:"กำลัง (ประมาณ)", c:"#ff6b00"},
+    {v:p.torque_nm+" Nm",   l:"แรงบิด (ประมาณ)", c:"#00e676"},
+    {v:d.fuel.ignition_btdc+"° BTDC", l:"จุดระเบิด", c:"#29b6f6"},
+    {v:p.peak_rpm.toLocaleString(), l:"รอบพลัง (RPM)", c:"#ffaa00"},
+    {v:p.cam_duration, l:"Cam Duration", c:"#ce93d8"},
+    {v:p.valve_lift_mm+" mm", l:"Valve Lift แนะนำ", c:"#80cbc4"},
+  ];
+  $("s3-out").innerHTML = '<div class="stats">' +
+    stats.map(function(x){ return '<div class="stat"><div class="v" style="color:'+x.c+'">'+x.v+'</div><div class="l">'+x.l+'</div></div>'; }).join("") +
+    '</div>';
+  $("step3").classList.add("active");
+}
+</script>
+</body>
+</html>

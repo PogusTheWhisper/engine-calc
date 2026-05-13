@@ -28,11 +28,11 @@
 |------|------------|
 | `api/index.py` | API และฟังก์ชันคำนวณ (Python WSGI สำหรับ Vercel) |
 | `api/index.html` | ส่วนติดต่อผู้ใช้บนเว็บ ภาษาไทย จัดวางแบบ 3 ขั้นตอน |
-| `engine_calc_gui.py` | โปรแกรมเดสก์ทอป Tkinter |
-| `make_flowchart.py` | สคริปต์สร้างแผนภาพ flowchart ด้วย graphviz |
-| `flowchart.png` | แผนภาพแสดงขั้นตอนการทำงาน |
+| `desktop/engine_calc_gui.py` | โปรแกรมเดสก์ทอป Tkinter |
+| `docs/make_flowchart.py` | สคริปต์สร้างแผนภาพ flowchart ด้วย graphviz |
+| `docs/flowchart.png` | แผนภาพแสดงขั้นตอนการทำงาน |
 | `vercel.json` | การตั้งค่าสำหรับ Vercel |
-| `DOCS.md` / `DOCS.pdf` | เอกสารอธิบายสูตรและเหตุผลทางฟิสิกส์โดยละเอียด |
+| `docs/DOCS.md` / `docs/DOCS.pdf` | เอกสารอธิบายสูตรและเหตุผลทางฟิสิกส์โดยละเอียด |
 
 ---
 
@@ -45,7 +45,7 @@
 ### 2.2 โปรแกรมเดสก์ทอป (Python GUI)
 
 ```bash
-python3 engine_calc_gui.py
+python3 desktop/engine_calc_gui.py
 ```
 
 โปรแกรมใช้ Python Standard Library อย่างเดียว ไม่ต้องติดตั้ง package เพิ่มเติม
@@ -54,10 +54,10 @@ python3 engine_calc_gui.py
 
 ```bash
 pip install graphviz       # ต้องติดตั้ง Graphviz binary ในระบบด้วย
-python3 make_flowchart.py
+python3 docs/make_flowchart.py
 ```
 
-ผลลัพธ์: ไฟล์ `flowchart.png`
+ผลลัพธ์: ไฟล์ `docs/flowchart.png`
 
 ---
 
@@ -201,7 +201,7 @@ Torque = 9,549 × kW / RPM
 
 ## 6. Flowchart
 
-แผนภาพ `flowchart.png` แสดงลำดับขั้นตอนการทำงานของโปรแกรม:
+แผนภาพ `docs/flowchart.png` แสดงลำดับขั้นตอนการทำงานของโปรแกรม:
 
 ```
 START → รับค่า Bore, Stroke → ตรวจสอบความถูกต้อง
@@ -210,7 +210,7 @@ START → รับค่า Bore, Stroke → ตรวจสอบความ�
      → STEP 3 (HP, Torque, RPM, Cam, Lift) → แสดงผล → END
 ```
 
-สามารถสร้างใหม่ได้โดยใช้คำสั่ง `python3 make_flowchart.py`
+สามารถสร้างใหม่ได้โดยใช้คำสั่ง `python3 docs/make_flowchart.py`
 
 ---
 
@@ -218,15 +218,17 @@ START → รับค่า Bore, Stroke → ตรวจสอบความ�
 
 ```
 engine-calc/
-├── api/
-│   ├── index.py          # WSGI app และฟังก์ชันคำนวณ
-│   └── index.html        # UI บนเว็บ (HTML/CSS/JS รวมในไฟล์เดียว)
-├── engine_calc_gui.py    # โปรแกรมเดสก์ทอป Tkinter
-├── make_flowchart.py     # สคริปต์สร้าง flowchart.png
-├── flowchart.png         # แผนภาพ flowchart
-├── vercel.json           # การตั้งค่า Vercel
-├── DOCS.md / DOCS.pdf    # เอกสารอธิบายสูตรโดยละเอียด
-├── README.md             # ไฟล์นี้
+├── api/                      # ส่วน backend สำหรับ Vercel
+│   ├── index.py              # WSGI app และฟังก์ชันคำนวณ
+│   └── index.html            # UI บนเว็บ (HTML/CSS/JS รวมในไฟล์เดียว)
+├── desktop/
+│   └── engine_calc_gui.py    # โปรแกรมเดสก์ทอป Tkinter
+├── docs/
+│   ├── DOCS.md / DOCS.pdf    # เอกสารอธิบายสูตรโดยละเอียด
+│   ├── flowchart.png         # แผนภาพ flowchart
+│   └── make_flowchart.py     # สคริปต์สร้างแผนภาพ
+├── vercel.json               # การตั้งค่า Vercel
+├── README.md
 └── LICENSE
 ```
 

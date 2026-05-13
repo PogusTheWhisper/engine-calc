@@ -45,7 +45,7 @@ body{font-family:'Barlow Condensed',sans-serif;background:#0a0c0f;color:#e0e0e0;
 .tag.blue{border-color:#0ea5e9;color:#38bdf8}
 .tag.yellow{border-color:#fbbf24;color:#fcd34d}
 .note{font-size:.85rem;color:#7a8a9a;background:rgba(255,255,255,.02);border:1px solid #1e2530;border-left:2px solid #1e2530;border-radius:4px;padding:6px 10px}
-.fuel-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.fuel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .fuel-btn{padding:8px 12px;border:1px solid #1e2530;border-radius:6px;background:transparent;color:#888;cursor:pointer;font-size:.95rem;letter-spacing:.05em;transition:all .2s;font-family:inherit}
 .fuel-btn.active{border-color:#ff6b00;background:rgba(255,107,0,.15);color:#ff6b00;font-weight:700}
 .bar-wrap{margin-bottom:12px}
@@ -118,7 +118,6 @@ footer{max-width:860px;margin:12px auto 0;text-align:center;font-size:.75rem;col
 
 <script>
 const FUELS = {
-  "91":  {label:"Gasohol 91", cr:10.0},
   "95":  {label:"Gasohol 95", cr:10.5},
   "E20": {label:"E20",        cr:11.5},
   "E85": {label:"E85",        cr:13.0},

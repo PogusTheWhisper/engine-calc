@@ -48,10 +48,9 @@ def calc_bore_stroke_character(bore_mm: float, stroke_mm: float) -> dict:
 
 
 FUEL_SPECS = {
-    "91":  {"label": "Gasohol 91", "cr": 10.0, "afr_stoich": 14.7, "injector_mult": 1.7, "ignition_btdc": 32},
-    "95":  {"label": "Gasohol 95", "cr": 10.5, "afr_stoich": 14.7, "injector_mult": 1.8, "ignition_btdc": 34},
-    "E20": {"label": "E20",        "cr": 11.5, "afr_stoich": 13.8, "injector_mult": 2.0, "ignition_btdc": 35},
-    "E85": {"label": "E85",        "cr": 13.0, "afr_stoich":  9.8, "injector_mult": 2.5, "ignition_btdc": 38},
+    "95":  {"label": "Gasohol 95", "cr": 10.5, "afr_stoich": 14.7, "injector_mult": 1.0, "ignition_btdc": 34},
+    "E20": {"label": "E20",        "cr": 11.5, "afr_stoich": 13.8, "injector_mult": 1.2, "ignition_btdc": 35},
+    "E85": {"label": "E85",        "cr": 13.0, "afr_stoich":  9.8, "injector_mult": 1.3, "ignition_btdc": 38},
 }
 
 

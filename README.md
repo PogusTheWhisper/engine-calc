@@ -10,7 +10,7 @@
 
 Deploy บน Vercel แล้ว — เว็บหน้าเดียวเรียก API Python ฝั่ง serverless ไม่มี dependency เพิ่ม (ใช้ stdlib อย่างเดียว)
 
-🔗 **Live**: https://engine-calc-ashen.vercel.app/
+🔗 **Live**: https://engine-calc-kmutt.vercel.app/
 
 ## โครงสร้าง
 

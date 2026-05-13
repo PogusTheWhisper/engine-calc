@@ -311,5 +311,5 @@ B/S < 0.9 → RPM 8,000   (Long Stroke)
 ## 6. แหล่งอ้างอิง
 
 - Heywood, J. B. *Internal Combustion Engine Fundamentals*, McGraw-Hill (1988)
-- สูตรช่างแต่งรถไทย — สอบทานกับคู่มือ ASCC, Tuning Shop Bangkok
+- สูตรช่างแต่งรถไทย — สอบถามกับคู่มือ ASCC, Tuning Shop Bangkok
 - BMEP / Power formulas — SAE J1349 standard

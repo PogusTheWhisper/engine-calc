@@ -67,11 +67,11 @@ def calc_performance(cc, bore_mm, stroke_mm, cr):
     """
     bs = bore_mm / stroke_mm
     if bs > 1.05:
-        rpm, cam, lift_mult = 11000, "270–285°", 0.28
+        rpm, cam, lift_mult = 11000, "270-285°", 0.28
     elif bs < 0.90:
-        rpm, cam, lift_mult =  8000, "250–260°", 0.24
+        rpm, cam, lift_mult =  8000, "250-260°", 0.24
     else:
-        rpm, cam, lift_mult =  9500, "260–270°", 0.26
+        rpm, cam, lift_mult =  9500, "260-270°", 0.26
 
     bmep_kpa = 900 + (cr - 10) * 30
     kw = (bmep_kpa * cc * rpm) / 120_000_000

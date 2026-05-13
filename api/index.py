@@ -71,24 +71,28 @@ def calc_fuel_specs(cc: float, fuel: str) -> dict:
 
 
 def calc_performance_estimate(cc: float, bore_mm: float, stroke_mm: float, cr: float) -> dict:
-    """Rough performance estimates — for guidance only, not dyno accuracy."""
+    """Rough performance estimates for a single-cylinder 4-stroke — guidance only."""
     bs_ratio = bore_mm / stroke_mm
-    bmep_kpa = 900 + (cr - 10) * 30           # higher CR → higher BMEP
-    hp_est   = (bmep_kpa * cc * 1e-6 * 10000) / 4.5
-    torq_est = (hp_est * 9549) / 10000
 
     if bs_ratio > 1.05:
-        peak_rpm  = 11000
-        cam_dur   = "270–285°"
+        peak_rpm = 11000
+        cam_dur = "270–285°"
         valve_lift = round(bore_mm * 0.28, 1)
     elif bs_ratio < 0.90:
-        peak_rpm  = 8000
-        cam_dur   = "250–260°"
+        peak_rpm = 8000
+        cam_dur = "250–260°"
         valve_lift = round(bore_mm * 0.24, 1)
     else:
-        peak_rpm  = 9500
-        cam_dur   = "260–270°"
+        peak_rpm = 9500
+        cam_dur = "260–270°"
         valve_lift = round(bore_mm * 0.26, 1)
+
+    # 4-stroke power: P(W) = BMEP(Pa) × Vd(m³) × (RPM/60) / 2
+    # Simplified: kW = BMEP_kPa × cc × RPM / 120,000,000
+    bmep_kpa = 900 + (cr - 10) * 30           # tuned NA single ~9–11 bar
+    kw_est = (bmep_kpa * cc * peak_rpm) / 120_000_000
+    hp_est = kw_est / 0.7457
+    torq_est = (kw_est * 9549) / peak_rpm     # Nm
 
     return {
         "hp_estimate":   round(hp_est, 1),
